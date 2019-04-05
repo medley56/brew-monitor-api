@@ -25,8 +25,11 @@ SECRET_KEY = '1=!kd$ks(6spj4hnj^o7+5is=h4e953hx_1z99snt(m7l+f-_6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    'gavinmedley.com',
+    'www.gavinmedley.com',
+    'localhost'
+]
 
 # Application definition
 
