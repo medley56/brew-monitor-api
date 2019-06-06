@@ -23,7 +23,7 @@ class ControlSerializer(serializers.HyperlinkedModelSerializer):
 class DeviceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Device
-        fields = ('serial_number', 'name', 'type')
+        fields = ('serial_number', 'uuid', 'name', 'type')
 
 
 class FermentationSerializer(serializers.HyperlinkedModelSerializer):

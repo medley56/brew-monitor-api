@@ -45,8 +45,10 @@ class Datapoint(models.Model):
 class Device(models.Model):
     DEVICE_TYPES = (
         ('GPIO', 'GPIO Device'),
+        ('BLE', 'Bluetooth Low Energy Device'),
     )
-    serial_number = models.CharField(max_length=100)
+    serial_number = models.CharField(max_length=100, null=True)
+    uuid = models.CharField(max_length=100, null=True)
     name = models.CharField(max_length=100)
     type = models.CharField(
         max_length=10,
