@@ -8,6 +8,20 @@ class Fermentation(models.Model):
         return '{}'.format(self.name)
 
 
+class Device(models.Model):
+    DEVICE_TYPES = (
+        ('GPIO', 'GPIO Device'),
+        ('BLE', 'Bluetooth Low Energy Device'),
+    )
+    serial_number = models.CharField(max_length=100, null=True)
+    uuid = models.CharField(max_length=100, null=True)
+    name = models.CharField(max_length=100)
+    type = models.CharField(
+        max_length=10,
+        choices=DEVICE_TYPES
+    )
+
+
 class Dataset(models.Model):
     UNIT_CHOICES = (
         ('DEGC', 'Degrees Celcius'),
@@ -32,6 +46,8 @@ class Dataset(models.Model):
 
     fermentation = models.ForeignKey(Fermentation, related_name='datasets', on_delete=models.CASCADE)
 
+    logging_device = models.ForeignKey(Device, null=True, related_name='datasets', on_delete=models.SET_NULL)
+
     def __str__(self):
         return '{} ({}) [id={}]'.format(self.get_variable_measured_display(), self.get_unit_display(), self.id)
 
@@ -40,20 +56,6 @@ class Datapoint(models.Model):
     timestamp = models.DateTimeField()
     value = models.DecimalField(decimal_places=8, max_digits=12)
     dataset = models.ForeignKey(Dataset, related_name='datapoints', on_delete=models.CASCADE)
-
-
-class Device(models.Model):
-    DEVICE_TYPES = (
-        ('GPIO', 'GPIO Device'),
-        ('BLE', 'Bluetooth Low Energy Device'),
-    )
-    serial_number = models.CharField(max_length=100, null=True)
-    uuid = models.CharField(max_length=100, null=True)
-    name = models.CharField(max_length=100)
-    type = models.CharField(
-        max_length=10,
-        choices=DEVICE_TYPES
-    )
 
 
 class Control(models.Model):

@@ -11,7 +11,7 @@ class DatapointSerializer(serializers.HyperlinkedModelSerializer):
 class DatasetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Dataset
-        fields = ('id', 'unit', 'variable_measured', 'fermentation', 'controls')
+        fields = ('id', 'unit', 'variable_measured', 'fermentation', 'logging_device', 'controls', 'datapoints')
 
 
 class ControlSerializer(serializers.HyperlinkedModelSerializer):
@@ -23,7 +23,7 @@ class ControlSerializer(serializers.HyperlinkedModelSerializer):
 class DeviceSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Device
-        fields = ('serial_number', 'uuid', 'name', 'type')
+        fields = ('serial_number', 'uuid', 'name', 'type', 'datasets')
 
 
 class FermentationSerializer(serializers.HyperlinkedModelSerializer):
