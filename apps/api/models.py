@@ -44,8 +44,10 @@ class Dataset(models.Model):
         choices=VARIABLE_MEASURED_CHOICES
     )
 
+    # No sense having a dataset that's not associated with a fermentation => Required
     fermentation = models.ForeignKey(Fermentation, related_name='datasets', on_delete=models.CASCADE)
 
+    # Null must be allowable so datasets can end and devices can go on logging to new datasets
     logging_device = models.ForeignKey(Device, null=True, related_name='datasets', on_delete=models.SET_NULL)
 
     def __str__(self):

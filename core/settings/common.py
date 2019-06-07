@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from logging.config import dictConfig
 
 from celery.schedules import crontab
 
@@ -26,6 +27,29 @@ SECRET_KEY = '1=!kd$ks(6spj4hnj^o7+5is=h4e953hx_1z99snt(m7l+f-_6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+TILT_UUID = 'a495bb10-c5b1-4b44-b512-1370f02d74de'
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': '/var/log/django.debug',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }
+#
+# LOGGING_CONFIG = dictConfig
 
 ALLOWED_HOSTS = [
     'gavinmedley.com',

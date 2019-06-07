@@ -46,9 +46,30 @@ class TiltHydrometerLogger(object):
 
     def insert_data(self):
         for uuid in self.data.keys():
-            logging_device = Device.objects.get(uuid=uuid)
-            t_dataset = Dataset.objects.get(logging_device=logging_device, variable_measured='T')
-            sg_dataset = Dataset.objects.get(logging_device=logging_device, variable_measured='SG')
+            logging_device = Device.objects.filter(uuid=uuid)
+            if len(logging_device) > 1:
+                raise ValueError('There are multiple devices with the same UUID in the database. Why?')
+            elif len(logging_device) == 0:
+                raise ValueError('There is no device in the DB with UUID {}'.format(uuid))
+            else:
+                logging_device = logging_device[0]
+
+            t_dataset = Dataset.objects.filter(logging_device=logging_device, variable_measured='T')
+            if len(t_dataset) > 1:
+                raise ValueError('There are multiple T datasets currently associated with device UUID {}'.format(uuid))
+            elif len(t_dataset) == 0:
+                raise ValueError('There are no T datasets associated with device UUID {}'.format(uuid))
+            else:
+                t_dataset = t_dataset[0]
+
+            sg_dataset = Dataset.objects.filter(logging_device=logging_device, variable_measured='SG')
+            if len(sg_dataset) > 1:
+                raise ValueError('There are multiple SG datasets currently associated with device UUID {}'.format(uuid))
+            elif len(sg_dataset) == 0:
+                raise ValueError('There are no SG datasets associated with device UUID {}'.format(uuid))
+            else:
+                sg_dataset = sg_dataset[0]
+
             for point in self.data[uuid]['T']:
                 Datapoint.objects.create(timestamp=point[0], value=point[1], dataset=t_dataset)
             for point in self.data[uuid]['SG']:
