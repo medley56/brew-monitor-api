@@ -5,7 +5,7 @@ class Fermentation(models.Model):
     name = models.CharField(max_length=200)
 
     def __str__(self):
-        return '{}'.format(self.name)
+        return 'Fermentation: {}'.format(self.name)
 
 
 class Device(models.Model):
@@ -48,10 +48,12 @@ class Dataset(models.Model):
     fermentation = models.ForeignKey(Fermentation, related_name='datasets', on_delete=models.CASCADE)
 
     # Null must be allowable so datasets can end and devices can go on logging to new datasets
-    logging_device = models.ForeignKey(Device, null=True, related_name='datasets', on_delete=models.SET_NULL)
+    logging_device = models.ForeignKey(Device, null=True, related_name='logged_datasets', on_delete=models.SET_NULL)
+
+    active = models.BooleanField(default=True)
 
     def __str__(self):
-        return '{} ({}) [id={}]'.format(self.get_variable_measured_display(), self.get_unit_display(), self.id)
+        return 'Dataset: {} ({}) [id={}]'.format(self.get_variable_measured_display(), self.get_unit_display(), self.id)
 
 
 class Datapoint(models.Model):
@@ -59,11 +61,17 @@ class Datapoint(models.Model):
     value = models.DecimalField(decimal_places=8, max_digits=12)
     dataset = models.ForeignKey(Dataset, related_name='datapoints', on_delete=models.CASCADE)
 
+    def __str___(self):
+        return 'Datapoint: {} - {}'.format(self.timestamp, self.value)
+
 
 class Control(models.Model):
-    created = models.DateTimeField(auto_created=True)
+    created = models.DateTimeField(auto_now=True)
     start_effect = models.DateTimeField()
     end_effect = models.DateTimeField()
     output_device = models.ForeignKey(Device, related_name='controls', on_delete=models.CASCADE)
     input_data = models.ForeignKey(Dataset, related_name='controls', on_delete=models.CASCADE)
     target_value = models.DecimalField(max_digits=12, decimal_places=8)
+
+    def __str___(self):
+        return 'Control: {}'.format(self.output_device.name)

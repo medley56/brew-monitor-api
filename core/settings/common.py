@@ -25,9 +25,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '1=!kd$ks(6spj4hnj^o7+5is=h4e953hx_1z99snt(m7l+f-_6'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 TILT_UUID = 'a495bb10-c5b1-4b44-b512-1370f02d74de'
 
 # LOGGING = {
@@ -52,8 +49,6 @@ TILT_UUID = 'a495bb10-c5b1-4b44-b512-1370f02d74de'
 # LOGGING_CONFIG = dictConfig
 
 ALLOWED_HOSTS = [
-    'gavinmedley.com',
-    'www.gavinmedley.com',
     'localhost'
 ]
 
@@ -67,11 +62,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_filters',
+    'corsheaders',
+    'crispy_forms',  # Allows generation of bootstrap themed filter forms for browsable API
     # Local apps
     'apps.api'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -79,6 +78,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:4200'
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -119,6 +122,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'apps.api.tasks.log_hydrometer_data',
         'schedule': crontab()
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
 }
 
 # Password validation
