@@ -32,7 +32,7 @@ class TiltHydrometerLogger(object):
         while dt.datetime.now(pytz.utc) - start_time < duration:
             if len(self.data[uuid]['T']) >= data_points:
                 scanner.stop()
-                break;
+                break
 
     def record_data(self, bt_addr, rssi, packet, additional_info):
         timestamp = dt.datetime.now(pytz.utc)
