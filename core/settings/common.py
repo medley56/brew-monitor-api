@@ -10,10 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+from __future__ import absolute_import
 import os
-from logging.config import dictConfig
-
-from celery.schedules import crontab
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -61,6 +59,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_filters',
+    'django_celery_beat',
     'corsheaders',
     'crispy_forms',  # Allows generation of bootstrap themed filter forms for browsable API
     # Local apps
@@ -115,12 +114,15 @@ DATABASES = {
 
 
 CELERY_BROKER_URL = 'amqp://localhost'
-CELERY_BEAT_SCHEDULE = {
-    'log_hydrometer_data': {
-        'task': 'apps.api.tasks.log_hydrometer_data',
-        'schedule': crontab()
-    }
-}
+CELERY_IMPORTS = (
+    'apps.api.tasks',
+)
+# CELERY_BEAT_SCHEDULE = {
+#     'log_hydrometer_data': {
+#         'task': 'apps.api.tasks.log_hydrometer_data',
+#         'schedule': crontab()
+#     }
+# }
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)

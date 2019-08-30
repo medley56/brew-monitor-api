@@ -21,6 +21,9 @@ class Device(models.Model):
         choices=DEVICE_TYPES
     )
 
+    def __str__(self):
+        return '{} ({} device): UUID={}'.format(self.name, self.type, self.uuid)
+
 
 class Dataset(models.Model):
     UNIT_CHOICES = (
@@ -61,7 +64,7 @@ class Datapoint(models.Model):
     value = models.DecimalField(decimal_places=8, max_digits=12)
     dataset = models.ForeignKey(Dataset, related_name='datapoints', on_delete=models.CASCADE)
 
-    def __str___(self):
+    def __str__(self):
         return 'Datapoint: {} - {}'.format(self.timestamp, self.value)
 
 
