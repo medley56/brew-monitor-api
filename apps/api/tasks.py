@@ -1,5 +1,6 @@
 import pytz
 import datetime as dt
+import logging
 
 from beacontools import IBeaconFilter, BeaconScanner
 from apps.api.models import Datapoint, Dataset, Device, Fermentation
@@ -17,8 +18,14 @@ class TiltHydrometerLogger(object):
             raise ValueError('No bluetooth devices found in database.')
         self.uuids = [device.uuid for device in ble_devices]
         self.data = { uuid: {'T': [], 'SG': []} for uuid in self.uuids }
+        self.log = logging.getLogger(__name__)
     
     def run(self):
+        """
+        Uses all UUIDs in database for ble devices, listens to each for a while,
+        averages the datapoints, and inserts the data into the database.
+        """
+        self.log.info('Starting TiltHydrometerLogger.run')
         for uuid in self.uuids:
             self.listen(5, dt.timedelta(seconds=10), uuid)
         self.insert_data()
